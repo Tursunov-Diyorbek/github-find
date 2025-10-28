@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -19,15 +19,15 @@ import {
   Alert,
   IconButton,
   Link,
-} from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import GitHubContext from './context/GitHubContext';
-import { debounce } from 'lodash';
+} from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import GitHubContext from "./context/GitHubContext";
+import { debounce } from "lodash";
 
 function App({ setDarkMode, darkMode }) {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const { user, repos, loading, error, fetchUser } = useContext(GitHubContext);
 
@@ -52,30 +52,41 @@ function App({ setDarkMode, darkMode }) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            GitHub User Finder
+            GitHub foydalanuvchi qidiruvchisi
           </Typography>
-          <IconButton sx={{ ml: 1 }} onClick={() => setDarkMode(!darkMode)} color="inherit">
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={() => setDarkMode(!darkMode)}
+            color="inherit"
+          >
             {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Toolbar>
       </AppBar>
       <Container sx={{ mt: 4 }}>
         <TextField
-          label="Enter GitHub Username"
+          label="GitHub foydalanuvchi nomini kiriting..."
           variant="outlined"
           fullWidth
           value={username}
           onChange={handleChange}
           sx={{ mb: 2 }}
         />
-        {loading && <CircularProgress sx={{ display: 'block', mx: 'auto' }} />}
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {loading && <CircularProgress sx={{ display: "block", mx: "auto" }} />}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         {user && (
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <Card>
                 <CardContent>
-                  <Avatar src={user?.avatar_url} sx={{ width: 100, height: 100, mx: 'auto' }} />
+                  <Avatar
+                    src={user?.avatar_url}
+                    sx={{ width: 100, height: 100, mx: "auto" }}
+                  />
                   <Typography variant="h5" align="center" gutterBottom>
                     {user?.name || user?.login}
                   </Typography>
@@ -86,10 +97,16 @@ function App({ setDarkMode, darkMode }) {
                     {user?.bio}
                   </Typography>
                   <Typography align="center" sx={{ mt: 1 }}>
-                    Followers: {user?.followers} | Following: {user?.following}
+                    Kuzatuvchilar: {user?.followers} | Kuzatilmoqda:{" "}
+                    {user?.following}
                   </Typography>
-                  <Link href={user?.html_url} target="_blank" rel="noopener" sx={{ display: 'block', textAlign: 'center', mt: 1 }}>
-                    View on GitHub
+                  <Link
+                    href={user?.html_url}
+                    target="_blank"
+                    rel="noopener"
+                    sx={{ display: "block", textAlign: "center", mt: 1 }}
+                  >
+                    GitHub'da ko'rish
                   </Link>
                 </CardContent>
               </Card>
@@ -116,11 +133,22 @@ function App({ setDarkMode, darkMode }) {
               )}
               {tabValue === 1 && (
                 <CardContent>
-                  <Typography>Public Repos: {user?.public_repos}</Typography>
-                  <Typography>Location: {user?.location || 'N/A'}</Typography>
-                  <Typography>Company: {user?.company || 'N/A'}</Typography>
-                  <Typography>Blog: {user?.blog ? <Link href={user?.blog}>{user?.blog}</Link> : 'N/A'}</Typography>
-                  <Typography>Joined: {new Date(user?.created_at).toLocaleDateString()}</Typography>
+                  <Typography>
+                    Jamoat omborlari: {user?.public_repos}
+                  </Typography>
+                  <Typography>Joylashuv: {user?.location || "N/A"}</Typography>
+                  <Typography>Kompaniya: {user?.company || "N/A"}</Typography>
+                  <Typography>
+                    Blog:{" "}
+                    {user?.blog ? (
+                      <Link href={user?.blog}>{user?.blog}</Link>
+                    ) : (
+                      "N/A"
+                    )}
+                  </Typography>
+                  <Typography>
+                    Qo'shildi: {new Date(user?.created_at).toLocaleDateString()}
+                  </Typography>
                 </CardContent>
               )}
             </Grid>
