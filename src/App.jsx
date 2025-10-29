@@ -141,7 +141,13 @@ function App({ setDarkMode, darkMode }) {
                     {user?.name || user?.login}
                   </Typography>
                   <Typography color="textSecondary">@{user?.login}</Typography>
-                  <Typography sx={{ my: 1 }}>{user?.bio}</Typography>
+                  {user?.bio && (
+                    <Typography
+                      variant="body2"
+                      sx={{ my: 1, fontStyle: "italic" }}>
+                      {user.bio}
+                    </Typography>
+                  )}
                   <Link
                     href={user?.html_url}
                     target="_blank"
@@ -224,7 +230,12 @@ function App({ setDarkMode, darkMode }) {
                       <ListItemText
                         primary={repo?.name}
                         secondary={
-                          <>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 0.5,
+                            }}>
                             <Typography
                               color="textSecondary"
                               sx={{
@@ -288,7 +299,7 @@ function App({ setDarkMode, darkMode }) {
                               }}>
                               Klon URL manzili
                             </Link>
-                          </>
+                          </Box>
                         }
                       />
                       <ListItemIcon>
@@ -316,7 +327,12 @@ function App({ setDarkMode, darkMode }) {
                         <ListItemText
                           primary={item?.login}
                           secondary={
-                            <>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 0.5,
+                              }}>
                               <Typography
                                 color="textSecondary"
                                 sx={{
@@ -349,7 +365,7 @@ function App({ setDarkMode, darkMode }) {
                                 <GitHubIcon fontSize="small" /> GitHub'da
                                 ko'rish
                               </Link>
-                            </>
+                            </Box>
                           }
                         />
                       </ListItem>
@@ -375,7 +391,12 @@ function App({ setDarkMode, darkMode }) {
                         <ListItemText
                           primary={item?.login}
                           secondary={
-                            <>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 0.5,
+                              }}>
                               <Typography
                                 color="textSecondary"
                                 sx={{
@@ -408,7 +429,7 @@ function App({ setDarkMode, darkMode }) {
                                 <GitHubIcon fontSize="small" /> GitHub'da
                                 ko'rish
                               </Link>
-                            </>
+                            </Box>
                           }
                         />
                       </ListItem>
