@@ -39,13 +39,14 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import PersonIcon from "@mui/icons-material/Person";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import GitHubSearch from "./assets/github-search.png";
 
 dayjs.extend(utc);
 
 function App({ setDarkMode, darkMode }) {
   const [username, setUsername] = useState("");
   const [tabValue, setTabValue] = useState(0);
-  const { user, repos, followers, loading, error, fetchUser } =
+  const { user, repos, followers, following, loading, error, fetchUser } =
     useContext(GitHubContext);
 
   const onFinish = () => {
@@ -57,8 +58,6 @@ function App({ setDarkMode, darkMode }) {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
-  console.log("repos", repos);
 
   return (
     <>
@@ -96,6 +95,32 @@ function App({ setDarkMode, darkMode }) {
             </Button>
           </Grid>
         </Grid>
+
+        {!user && (
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+            <Grid item xs={8} md={4}>
+              <Avatar
+                src={GitHubSearch}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  mx: "auto",
+                  "& img": {
+                    userSelect: "none",
+                    pointerEvents: "none",
+                    WebkitUserDrag: "none",
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+        )}
 
         {loading && <CircularProgress sx={{ display: "block", mx: "auto" }} />}
         {error && (
@@ -190,6 +215,7 @@ function App({ setDarkMode, darkMode }) {
               <Tabs value={tabValue} onChange={handleTabChange} centered>
                 <Tab label="Omborxonalar" />
                 <Tab label="Kuzatuvchilarim" />
+                <Tab label="Kuzatadiganlarim" />
               </Tabs>
               {tabValue === 0 && (
                 <List>
@@ -275,6 +301,65 @@ function App({ setDarkMode, darkMode }) {
               {tabValue === 1 && (
                 <CardContent>
                   {followers?.map((item, index) => (
+                    <List
+                      sx={{
+                        width: "100%",
+                      }}
+                      key={index}>
+                      <ListItem alignItems="flex-start">
+                        <ListItemAvatar sx={{ mr: 2 }}>
+                          <Avatar
+                            src={item?.avatar_url}
+                            sx={{ width: 50, height: 50, mx: "auto" }}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item?.login}
+                          secondary={
+                            <>
+                              <Typography
+                                color="textSecondary"
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}>
+                                <PersonIcon fontSize="small" />{" "}
+                                {item?.type || "Kiritilmagan"}
+                              </Typography>
+                              <Typography
+                                color="textSecondary"
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}>
+                                <VisibilityIcon fontSize="small" />{" "}
+                                {item?.user_view_type || "Kiritilmagan"}
+                              </Typography>
+                              <Link
+                                href={item?.html_url}
+                                target="_blank"
+                                rel="noopener"
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1,
+                                }}>
+                                <GitHubIcon fontSize="small" /> GitHub'da
+                                ko'rish
+                              </Link>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                    </List>
+                  ))}
+                </CardContent>
+              )}
+              {tabValue === 2 && (
+                <CardContent>
+                  {following?.map((item, index) => (
                     <List
                       sx={{
                         width: "100%",

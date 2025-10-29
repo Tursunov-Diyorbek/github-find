@@ -5,6 +5,7 @@ const GitHubProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [repos, setRepos] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -14,6 +15,7 @@ const GitHubProvider = ({ children }) => {
     setUser(null);
     setRepos([]);
     setFollowers([]);
+    setFollowing([]);
 
     try {
       const userRes = await fetch(`https://api.github.com/users/${username}`);
@@ -33,6 +35,12 @@ const GitHubProvider = ({ children }) => {
 
       const reposFollowersData = await reposFollowers.json();
       setFollowers(reposFollowersData);
+
+      const reposFollowing = await fetch(`https://api.github.com/users/${username}/following`);
+      if (!reposFollowing.ok) throw new Error('Kuzatuvchilarni olishda xatolik');
+
+      const reposFollowingData = await reposFollowing.json();
+      setFollowing(reposFollowingData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -41,7 +49,7 @@ const GitHubProvider = ({ children }) => {
   };
 
   return (
-    <GitHubContext.Provider value={{ user, repos, followers, loading, error, fetchUser }}>
+    <GitHubContext.Provider value={{ user, repos, followers, following, loading, error, fetchUser }}>
       {children}
     </GitHubContext.Provider>
   );
