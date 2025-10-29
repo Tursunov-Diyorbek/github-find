@@ -218,11 +218,76 @@ function App({ setDarkMode, darkMode }) {
               </Card>
             </Grid>
             <Grid item xs={12} md={8}>
-              <Tabs value={tabValue} onChange={handleTabChange} centered>
-                <Tab label="Omborxonalar" />
-                <Tab label="Kuzatuvchilarim" />
-                <Tab label="Kuzatadiganlarim" />
-              </Tabs>
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  overflowX: "auto",
+                  "&::-webkit-scrollbar": {
+                    height: 1,
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: darkMode ? "#2d2d2d" : "#f1f1f1",
+                    borderRadius: 4,
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: darkMode ? "#555" : "#aaa",
+                    borderRadius: 4,
+                    "&:hover": {
+                      background: darkMode ? "#777" : "#999",
+                    },
+                  },
+                }}>
+                <Tabs
+                  value={tabValue}
+                  onChange={handleTabChange}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  allowScrollButtonsMobile
+                  aria-label="scrollable tabs"
+                  sx={{
+                    minWidth: "max-content",
+                    "& .MuiTabs-scrollButtons": {
+                      opacity: 1,
+                      color: darkMode ? "#fff" : "#000",
+                      bgcolor: darkMode
+                        ? "rgba(255,255,255,0.1)"
+                        : "rgba(0,0,0,0.05)",
+                      borderRadius: "50%",
+                      width: 36,
+                      height: 36,
+                      "&.Mui-disabled": {
+                        opacity: 0.3,
+                      },
+                    },
+                    "& .MuiTab-root": {
+                      fontWeight: 600,
+                      textTransform: "none",
+                      minWidth: 130,
+                      fontSize: "0.95rem",
+                      px: 3,
+                      borderRadius: 2,
+                      transition: "0.2s",
+                      "&:hover": {
+                        bgcolor: darkMode
+                          ? "rgba(255,255,255,0.08)"
+                          : "rgba(0,0,0,0.04)",
+                      },
+                    },
+                    "& .Mui-selected": {
+                      color: "primary.main",
+                      fontWeight: 700,
+                    },
+                    "& .MuiTabs-indicator": {
+                      height: 3,
+                      borderRadius: 2,
+                    },
+                  }}>
+                  <Tab label="Omborxonalar" />
+                  <Tab label="Kuzatuvchilar" />
+                  <Tab label="Kuzatilmoqda" />
+                </Tabs>
+              </Box>
               {tabValue === 0 && (
                 <List>
                   {repos?.map((repo) => (
