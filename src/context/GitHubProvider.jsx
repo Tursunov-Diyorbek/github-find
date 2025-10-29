@@ -4,6 +4,7 @@ import GitHubContext from './GitHubContext';
 const GitHubProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [repos, setRepos] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -12,32 +13,26 @@ const GitHubProvider = ({ children }) => {
     setError(null);
     setUser(null);
     setRepos([]);
+    setFollowers([]);
 
     try {
-      const cachedUser = localStorage.getItem(`github_user_${username}`);
-      const cachedRepos = localStorage.getItem(`github_repos_${username}`);
-
-      if (cachedUser && cachedRepos) {
-        setUser(JSON.parse(cachedUser));
-        setRepos(JSON.parse(cachedRepos));
-        setLoading(false);
-        return;
-      }
-
       const userRes = await fetch(`https://api.github.com/users/${username}`);
-      if (!userRes.ok) throw new Error('User not found');
+      if (!userRes.ok) throw new Error('Foydalanuvchi topilmadi');
 
       const userData = await userRes.json();
       setUser(userData);
 
       const reposRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
-      if (!reposRes.ok) throw new Error('Error fetching repos');
+      if (!reposRes.ok) throw new Error('Repozitoriyalarni olishda xatolik');
 
       const reposData = await reposRes.json();
       setRepos(reposData);
 
-      localStorage.setItem(`github_user_${username}`, JSON.stringify(userData));
-      localStorage.setItem(`github_repos_${username}`, JSON.stringify(reposData));
+      const reposFollowers = await fetch(`https://api.github.com/users/${username}/followers`);
+      if (!reposFollowers.ok) throw new Error('Kuzatuvchilarni olishda xatolik');
+
+      const reposFollowersData = await reposFollowers.json();
+      setFollowers(reposFollowersData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,7 +41,7 @@ const GitHubProvider = ({ children }) => {
   };
 
   return (
-    <GitHubContext.Provider value={{ user, repos, loading, error, fetchUser }}>
+    <GitHubContext.Provider value={{ user, repos, followers, loading, error, fetchUser }}>
       {children}
     </GitHubContext.Provider>
   );
